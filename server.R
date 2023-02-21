@@ -75,7 +75,10 @@ server <- function(input, output) {
   
   # Captains table
   
-  output$captain_comparison <- DT::renderDataTable(tibble(captain_table()))
+  output$captain_comparison <- DT::renderDataTable(tibble(captain_table()),
+                                                   options = list(scrollX = TRUE,
+                                                                  autoWidth = TRUE,
+                                                                  paging = FALSE))
   
   # Get transfers tibble
   
@@ -87,7 +90,10 @@ server <- function(input, output) {
   })
   
   # Transfers table
-  output$gw_table <- DT::renderDataTable(tibble(transfers_table()))
+  output$gw_table <- DT::renderDataTable(tibble(transfers_table()), 
+                                         options = list(scrollX = TRUE,
+                                                        autoWidth = TRUE,
+                                                        paging = FALSE))
   
   
   plot_data <- reactive({
