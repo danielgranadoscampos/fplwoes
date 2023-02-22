@@ -123,6 +123,58 @@ server <- function(input, output) {
       xlab("Gameweek")
   })
   
+  #Average team data
+  
+ average_team_score <- gw_info |> 
+    drop_na() |> 
+    tibble() |> 
+    mutate(total_points = cumsum(average_entry_score),
+           ind = "average_team") |>
+    select(id, total_points, ind) |>
+    rename(event = id)
+ 
+ # Average top 10 managers data
+ 
+ source("get_top10_data.R")
+ 
+ average_top_points <- get_top10_data()
+ 
+ # My_team_data
+ 
+ my_team_scores <- reactive({
+   
+   my_team_scores <- season_history() |>
+     rename(event = id) |>
+     select(event, total_points) |>
+     mutate(ind = "my_score") |>
+     select(event, total_points, ind)
+   
+   return(my_team_scores)
+   
+ }) 
+ 
+ # Top 10 comparison data
+ 
+ top_10_plot_data <- reactive({
+   top_10_plot_data <- bind_rows(average_team_score,
+             average_top_points,
+             my_team_scores())
+   return(top_10_plot_data)
+   
+ })
+ # Top 10 comparison plot
+ 
+ output$top10_plot <- renderPlot({
+   ggplot(top_10_plot_data(), aes(x = as.factor(event), y = total_points, 
+                                  group = ind , color = ind)) +
+     geom_line(size = 2) + 
+     scale_y_continuous(n.breaks = 12) +
+     theme_minimal()+
+     theme(panel.background = element_rect(fill = '#ECF0F5', color = '#ECF0F5'),
+           plot.background = element_rect(fill = "#ECF0F5", colour = "#ECF0F5")) +
+     xlab("Gameweek")
+ })
+  
   
   
 }

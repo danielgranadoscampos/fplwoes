@@ -33,6 +33,10 @@ body <- dashboardBody(# infoBoxes with fill=FALSE
   fluidRow(
     plotOutput("points_plot")
   ),
+  tags$h3("Total Points Journey: A Look at Top 10 Managers, The Average Player, and You."), 
+  fluidRow(
+    plotOutput("top10_plot")
+  ),
   tags$div(
     tags$p("If you liked this analysis consider..."), tags$a(href = "https://www.buymeacoffee.com/danielu", "buying me a coffee")
   )
