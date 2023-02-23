@@ -2,7 +2,8 @@
 get_top10_data <- function (){
   
   top_entries <- get_league_entries(leagueid = 314) |>
-    arrange(desc(rank)) |> head(10)
+    arrange((rank)) |> 
+    head(10)
   
   top_10_ids <- top_entries$entry
   
