@@ -77,7 +77,7 @@ server <- function(input, output) {
   
   output$captain_comparison <- DT::renderDataTable(tibble(captain_table()),
                                                    options = list(scrollX = TRUE,
-                                                                  autoWidth = TRUE,
+                                                                  #autoWidth = TRUE,
                                                                   paging = FALSE))
   
   # Get transfers tibble
@@ -92,7 +92,7 @@ server <- function(input, output) {
   # Transfers table
   output$gw_table <- DT::renderDataTable(tibble(transfers_table()), 
                                          options = list(scrollX = TRUE,
-                                                        autoWidth = TRUE,
+                                                        #autoWidth = TRUE,
                                                         paging = FALSE))
   
   
