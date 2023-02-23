@@ -15,10 +15,14 @@ get_captain_table <- function(entry_id, season_history) {
   # Get the lowest scoring gameweeks as list
   low_gw <- lowest_season_scores$id |> sort()
   
-  # Jesper picks
+  # get_top_entry
+  top_entry <- get_league_entries(leagueid = 314) |>
+    arrange(rank) |> head(1) |> pull(entry) # this is called in get_top_10 also
   
-  jesper_captain <- get_entry_captain(2960212, low_gw) |> 
-    tibble() |> rename(jesper_captain = playername)
+  # world_leader picks
+  
+  world_leader_captain <- get_entry_captain(top_entry, low_gw) |> 
+    tibble() |> rename(world_leader_captain = playername)
   
   #Your captain
   your_captain <- get_entry_captain(entry_id, low_gw) |>
@@ -26,7 +30,7 @@ get_captain_table <- function(entry_id, season_history) {
   
   # Player list 
   
-  captains_list <- c(your_captain$id, jesper_captain$id) |>
+  captains_list <- c(your_captain$id, world_leader_captain$id) |>
     unique()
   
   #captain details
@@ -40,27 +44,20 @@ get_captain_table <- function(entry_id, season_history) {
   
   # join captain tables with detais
   
-  jesper_details <- inner_join(all_details, jesper_captain) |>
+  world_leader_details <- inner_join(all_details, world_leader_captain) |>
     select(-entry, -id) |>
-    rename(jesper_captain_points = total_points)
+    rename(world_leader_captain_points = total_points)
   
   your_captain_details <- inner_join(all_details, your_captain) |>
     select(-entry, -id) |>
     rename(my_captain_points = total_points)
   
   # captain comparison
-  result <- inner_join(jesper_details, your_captain_details, by = "event") |>
-    mutate(captain_difference = my_captain_points - jesper_captain_points) |>
+  result <- inner_join(world_leader_details, your_captain_details, by = "event") |>
+    mutate(captain_difference = my_captain_points - world_leader_captain_points) |>
     rename(GW = event)
   return(result)
   
 }
 
 
-# my_id = 965064
-# s_history <- get_entry_season(entryid = my_id)|> 
-#   rename(id = event)
-# 
-# 
-# 
-# captain_table <- get_captain_table(my_id, s_history)
